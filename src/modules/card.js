@@ -39,7 +39,7 @@ export default class Card {
       dataset: { animateOn: false },
     }).element;
     const cardInfoHeader = new DomElement({
-      tag: "h5",
+      tag: "h4",
       className: "card__info__header",
       textContent: `${this.name}`,
     }).element;
@@ -47,7 +47,11 @@ export default class Card {
     const cardList = new DomElement({ tag: "table" }).element;
     Object.keys(this.props).forEach((prop) => {
       const cardListItem = new DomElement({ tag: "tr" }).element;
-      cardListItem.innerHTML = `<td class="card__list-heading">${prop}</td><td>${this.props[prop]}</td>`;
+      const propValue =
+        prop !== "movies"
+          ? this.props[prop]
+          : this.createMoviesList(this.props[prop]);
+      cardListItem.innerHTML = `<td class="card__list-heading">${prop}</td><td>${propValue}</td>`;
       cardList.append(cardListItem);
     });
 
@@ -57,6 +61,13 @@ export default class Card {
     this.block.style.backgroundImage = `url('${this.photo}')`;
 
     this.block.append(cardInfo);
+  }
+  createMoviesList(list) {
+    let listHTML = "";
+    list.forEach((item) => {
+      listHTML += `<p class="badge">${item}</p>`;
+    });
+    return listHTML;
   }
   static blockInfoAnimate(cardInfo, show) {
     const cardInfoBottom = Card.cardInfoBottom;
