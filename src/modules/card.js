@@ -3,33 +3,12 @@ import { animate, DomElement } from "./helpers";
 export default class Card {
   static cardInfoBottom = "-90";
 
-  constructor({
-    photo,
-    ...props
-    // actors,
-    // birthDay,
-    // deathDay,
-    // gender,
-    // movies,
-    // name,
-    // species,
-    // status,
-  }) {
+  constructor({ photo, ...props }) {
     this.photo = photo;
     this.props = props;
     Object.keys(props).forEach((prop) => {
       this[prop] = props[prop];
     });
-    // this.actors = actors;
-    // this.birthDay = birthDay;
-    // this.deathDay = deathDay;
-    // this.gender = gender;
-    // this.movies = movies;
-    // this.name = name;
-    //
-    // this.species = species;
-    // this.status = status;
-
     this.create();
   }
   create() {
@@ -61,7 +40,7 @@ export default class Card {
 
     cardInfo.append(cardInfoHeader, cardList);
 
-    this.block = new DomElement({ className: "card" }).element;
+    this.block = new DomElement({ className: "card card-hero" }).element;
     this.block.style.backgroundImage = `url('${this.photo}')`;
 
     this.block.append(cardInfo);

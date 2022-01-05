@@ -1,6 +1,7 @@
 "use strict";
 
 import Card from "./modules/card";
+import MovieFilter from "./modules/movieFilter";
 
 const url = "/dbHeroes.json";
 const container = document.querySelector(".cards");
@@ -26,10 +27,18 @@ const getData = ({ url }) => {
 getData({ url }).then((heroesData) => {
   if (heroesData) {
     console.log(heroesData);
+    let movies = [];
     heroesData.forEach((hero) => {
       const card = new Card({ ...hero });
+      if (hero.movies) {
+        movies = [...movies, ...hero.movies];
+      }
       container.append(card.block);
     });
+    movies = new Set(movies);
+    console.log(movies);
+
+    const filter = new MovieFilter(movies);
   }
 });
 
