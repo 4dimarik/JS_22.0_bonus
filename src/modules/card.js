@@ -51,7 +51,11 @@ export default class Card {
         prop !== "movies"
           ? this.props[prop]
           : this.createMoviesList(this.props[prop]);
-      cardListItem.innerHTML = `<td class="card__list-heading">${prop}</td><td>${propValue}</td>`;
+      cardListItem.innerHTML = `<td class="card__list-heading">${prop
+        .replace(/[A-Z]{1}/, (char) => ` ${char.toLowerCase()}`)
+        .replace(/^[a-zA-Z]{1}/, (char) =>
+          char.toUpperCase()
+        )}</td><td>${propValue}</td>`;
       cardList.append(cardListItem);
     });
 
