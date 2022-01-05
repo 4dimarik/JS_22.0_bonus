@@ -9,4 +9,7 @@ export default class Filter {
   render() {
     this.filtersBlock.append(this.block);
   }
+  // setEventListener(type, func) {
+  //   this.block.addEventListener(type, func);
+  // }
 }

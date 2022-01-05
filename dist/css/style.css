@@ -20,11 +20,9 @@
     --font-pnb:"Proxima Nova Bold", sans-serif;
     --bg-color:#303030;
 }
-* {
+html, body {
     margin: 0;
-    padding: 0;
     box-sizing: border-box;
-
 }
 
 body{
@@ -34,16 +32,18 @@ body{
     background-color: var(--bg-color);
     color: #fff;
 }
-
+.container {
+    padding: 1rem;
+}
 .cards {
     color: #fff;
     box-sizing: border-box;
     font-family: var(--font-pnb);
-    margin: 1.5rem;
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
+    margin: auto;
 }
 .card {
     border: 0;
@@ -51,10 +51,11 @@ body{
     box-shadow: 0 10px 20px 0 rgba(0,0,0,.25);
 }
 .card-filter{
-    width: 100%;
-    padding: 1rem;
-    margin: 0.5rem;
-
+    margin: 0 0.57rem;
+}
+.filter{
+    margin: .5rem;
+    padding: 1rem .5rem;
 }
 .card-hero{
     width: 15%;
@@ -63,7 +64,7 @@ body{
     background-repeat: no-repeat;
     background-position:center center;
     background-size:cover;
-    margin: 0.5rem;
+    margin: 0.57rem;
     overflow: hidden;
 }
 .card__info{
