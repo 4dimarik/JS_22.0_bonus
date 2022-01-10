@@ -1,26 +1,29 @@
 import { animate, DomElement } from "./helpers";
 
-export default class Card {
-  static cardInfoBottom = "-90";
+export default class Card__ {
+  static cardInfoBottom = "41";
+  static animateDuration = 200;
 
   constructor({ photo, ...props }) {
     this.photo = photo;
     this.props = props;
+
     Object.keys(props).forEach((prop) => {
       this[prop] = props[prop];
     });
+
     this.create();
   }
   create() {
     const cardInfo = new DomElement({
       className: "card__info",
-      style: { bottom: Card.cardInfoBottom + "%" },
+      style: { bottom: Card__.cardInfoBottom + "px" },
       dataset: { animateOn: false },
     }).element;
     const cardInfoHeader = new DomElement({
       tag: "h4",
       className: "card__info__header",
-      textContent: `${this.name}`,
+      innerHTML: `<span>${this.name}</span><i class="fa-solid fa-circle-info"></i>`,
     }).element;
 
     const cardList = new DomElement({ tag: "table" }).element;
@@ -53,12 +56,12 @@ export default class Card {
     return listHTML;
   }
   static blockInfoAnimate(cardInfo, show) {
-    const cardInfoBottom = Card.cardInfoBottom;
+    const cardInfoBottom = Card__.cardInfoBottom;
     cardInfo.dataset.animateOn = true;
 
     const animateValue = show
-      ? (progress) => `${cardInfoBottom - progress * cardInfoBottom}%`
-      : (progress) => `${Math.abs(progress) * cardInfoBottom}%`;
+      ? (progress) => `${cardInfoBottom - progress * cardInfoBottom}px`
+      : (progress) => `${Math.abs(progress) * cardInfoBottom}px`;
     const animateCompleted = show
       ? () => {
           cardInfo.classList.add("active");
@@ -70,7 +73,7 @@ export default class Card {
         };
 
     animate({
-      duration: 300,
+      duration: Card__.animateDuration,
       timing(timeFraction) {
         return timeFraction;
       },

@@ -1,8 +1,11 @@
 "use strict";
 
-import Card from "./modules/card";
-import MovieFilter from "./modules/movieFilter";
+import HeroCard from "./modules/heroCard";
+import FilterMovie from "./modules/filter_movie";
 import Storage from "./modules/storage";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import { animate } from "./modules/helpers";
+import totalString from "./modules/totalString";
 
 const url = "/dbHeroes.json";
 const cards = document.querySelector(".cards");
@@ -10,86 +13,94 @@ const cards = document.querySelector(".cards");
 const storageData = new Storage("heroes");
 const storageMovies = new Storage("movies");
 
-const getData = ({ url }) => {
-  return fetch(url)
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw response;
-      }
-    })
-    .catch((response) => {
+const getData = async (url) => {
+  try {
+    const response = await fetch(url);
+    if (response.ok) {
+      return { status: "ok", heroList: await response.json() };
+    } else {
       const errorMessage =
         `status: ${response.status}` +
         `${response.statusText ? ", statusText:" + response.statusText : ""}`;
-      console.error(errorMessage);
-      return response.ok;
-    });
+      throw new Error(errorMessage);
+    }
+  } catch (error) {
+    console.error(error);
+    return { status: false };
+  }
 };
 
-const renderCards = (filter = null) => {
-  if (storageData.isExist()) {
-    cards.innerHTML = "";
-    const data = filter
-      ? storageData.get().filter((item) => {
-          console.log(item[filter.key]);
+const renderCards = (wrapper, heroesList, filter = null) => {
+  wrapper.innerHTML = "";
+  heroesList =
+    filter && filter.value !== "All"
+      ? heroesList.filter((item) => {
           return Array.isArray(item[filter.key])
             ? item[filter.key].includes(filter.value)
             : item[filter.key] === filter.value;
         })
-      : storageData.get();
-    data.forEach((item) => {
-      const card = new Card({ ...item });
-      cards.append(card.block);
-    });
-  }
+      : heroesList;
+  const all = filter && filter.value === "All";
+  totalString(all, heroesList.length);
+  heroesList.forEach((hero) => {
+    const heroCard = new HeroCard();
+    heroCard.setBgImg(hero.photo);
+    heroCard.setName(hero.name);
+    heroCard.setSpecifications(hero);
+
+    wrapper.append(heroCard.card);
+  });
 };
 
-getData({ url }).then((data) => {
-  if (data) {
-    let movies = data.reduce(
-      (movies, hero) => (hero.movies ? [...movies, ...hero.movies] : movies),
-      []
-    );
-    storageMovies.set([...new Set(movies)]);
-    storageData.set(data);
-    renderCards();
+if (!storageData.isExist() || !storageMovies.isExist()) {
+  (async function loadHeroList() {
+    const { status, heroList } = await getData(url);
+    if (status) {
+      storageData.set(heroList);
 
-    const filter = new MovieFilter(storageMovies.get());
-    filter.block.addEventListener("input", (e) => {
-      console.log(e.target.value);
-      renderCards({ key: "movies", value: e.target.value });
+      let movies = heroList.reduce(
+        (movies, hero) => (hero.movies ? [...movies, ...hero.movies] : movies),
+        []
+      );
+      storageMovies.set([...new Set(movies)]);
+    }
+  })();
+} else {
+  renderCards(cards, storageData.get());
+
+  const filter = new FilterMovie(storageMovies.get());
+  filter.block.addEventListener("input", (e) => {
+    renderCards(cards, storageData.get(), {
+      key: "movies",
+      value: e.target.value,
+    });
+  });
+}
+
+cards.addEventListener("click", (e) => {
+  e.preventDefault();
+  const { target } = e;
+  if (target.closest(".info-link")) {
+    const infoBlock = target.closest(".card").querySelector(".info-block");
+    const header = target.closest(".card").querySelector("footer");
+    infoBlock.classList.toggle("active");
+
+    const animateValue = infoBlock.classList.contains("active")
+      ? (progress) => `circle(${Math.trunc(progress * 135)}% at 304px 1.5rem)`
+      : (progress) =>
+          `circle(${Math.trunc(135 - progress * 135)}% at 304px 1.5rem)`;
+
+    animate({
+      duration: 400,
+      timing(timeFraction) {
+        return timeFraction;
+      },
+      draw(progress) {
+        infoBlock.style.clipPath = animateValue(progress);
+      },
+      completed() {
+        header.classList.toggle("d-none");
+      },
     });
   }
 });
-
-cards.addEventListener(
-  "mouseenter",
-  (e) => {
-    const { target } = e;
-    const cardInfo = target.closest(".card__info");
-
-    if (target.matches(".card__info")) {
-      if (cardInfo.dataset.animateOn === "false") {
-        Card.blockInfoAnimate(cardInfo, true);
-      }
-    }
-  },
-  true
-);
-
-cards.addEventListener(
-  "mouseleave",
-  (e) => {
-    const { target } = e;
-    const cardInfo = target.querySelector(".card__info.active");
-
-    if (cardInfo) {
-      if (cardInfo.dataset.animateOn === "false") {
-        Card.blockInfoAnimate(cardInfo, false);
-      }
-    }
-  },
-  true
-);

@@ -1,5 +1,4 @@
 "use strict";
-import { DomElement } from "./helpers";
 
 export default class Filter {
   constructor({ filtersBlockSelector }) {
@@ -7,9 +6,6 @@ export default class Filter {
     this.filtersBlock = document.querySelector(filtersBlockSelector);
   }
   render() {
-    this.filtersBlock.append(this.block);
+    this.filtersBlock.prepend(this.block);
   }
-  // setEventListener(type, func) {
-  //   this.block.addEventListener(type, func);
-  // }
 }

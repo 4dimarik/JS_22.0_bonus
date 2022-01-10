@@ -2,9 +2,9 @@
 import { DomElement } from "./helpers";
 import Filter from "./filter";
 
-export default class MovieFilter extends Filter {
+export default class FilterMovie extends Filter {
   constructor(options) {
-    super({ filtersBlockSelector: ".card-filter" });
+    super({ filtersBlockSelector: ".filters" });
     this.class = "movie-filter filter";
     this.id = "movie_filter";
 
@@ -20,10 +20,10 @@ export default class MovieFilter extends Filter {
       textContent: "Фильтр по фильму:",
     }).element;
     this.block.append(label, this.select);
-    // this.setEventListener("input", this.inputEvent);
   }
   createSelectElement(options) {
     this.select = new DomElement({ tag: "select", id: this.id }).element;
+    options = ["All", ...options];
     options.forEach((option) => {
       const optionElement = new DomElement({
         tag: "option",
@@ -33,9 +33,4 @@ export default class MovieFilter extends Filter {
       this.select.append(optionElement);
     });
   }
-  // inputEvent(e) {
-  //   console.log("select");
-  //   console.log(e.target);
-  //   console.log(e.target.value);
-  // }
 }
