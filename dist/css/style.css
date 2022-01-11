@@ -166,39 +166,6 @@ p.badge {
 
 
 
-
-/*.card__info.active{*/
-
-/*}*/
-
-/*.card__info__header{*/
-/*    letter-spacing: 1px;*/
-/*    margin: .5rem 1rem;*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*}*/
-/*.card__info__header span{*/
-/*    width: 100%;*/
-/*}*/
-/*.card__info__header i{*/
-/*    flex-shrink: 1;*/
-/*}*/
-/*!*.card__info table{*!*/
-/*!*    font-family: var(--font-pnt);*!*/
-/*!*    margin: 1rem 1rem;*!*/
-/*!*    text-align: left;*!*/
-/*!*}*!*/
-/*.card__info td{*/
-/*    font-family: var(--font-pnt);*/
-/*}*/
-/*.card__info td.card__list-heading{*/
-/*    font-family: var(--font-pnr);*/
-/*    padding-right: .6rem;*/
-/*    white-space: nowrap;*/
-/*}*/
-
-
-
 @media (max-width: 575px) {
 }
 /*Small devices (landscape phones, 576px and up)*/
