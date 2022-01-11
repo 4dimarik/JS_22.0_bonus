@@ -7,7 +7,7 @@ import Storage from "./modules/storage";
 import { animate } from "./modules/helpers";
 import renderCards from "./modules/renderCards";
 
-const url = "./dbHeroes.json";
+const url = "../dbHeroes.json";
 const cards = document.querySelector(".cards");
 
 const storageData = new Storage("heroes");
