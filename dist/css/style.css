@@ -1,17 +1,17 @@
 @font-face {
 	font-family: "Proxima Nova Thin"; 
 	src: local("Proxima Nova Thin"),
-        url("/fonts/ProximaNovaT-Thin.woff2") format("woff2");
+        url("../fonts/ProximaNovaT-Thin.woff2") format("woff2");
 }
 @font-face {
 	font-family: "Proxima Nova Regular"; 
 	src: local("Proxima Nova Regular"),
-        url("/fonts/ProximaNova-Regular.woff2") format("woff2");
+        url("../fonts/ProximaNova-Regular.woff2") format("woff2");
 }
 @font-face {
 	font-family: "Proxima Nova Bold"; 
 	src: local("Proxima Nova Bold"),
-        url("/fonts/ProximaNova-Bold.woff2") format("woff2");
+        url("../fonts/ProximaNova-Bold.woff2") format("woff2");
 }
 :root {
     --box-radius:6px;
