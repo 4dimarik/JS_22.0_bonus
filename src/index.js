@@ -1,17 +1,18 @@
 "use strict";
 
-import HeroCard from "./modules/heroCard";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
 import FilterMovie from "./modules/filter_movie";
 import Storage from "./modules/storage";
-import "@fortawesome/fontawesome-free/css/all.min.css";
 import { animate } from "./modules/helpers";
-import totalString from "./modules/totalString";
+import renderCards from "./modules/renderCards";
 
 const url = "/dbHeroes.json";
 const cards = document.querySelector(".cards");
 
 const storageData = new Storage("heroes");
 const storageMovies = new Storage("movies");
+const storageFilter = new Storage("filter");
 
 const getData = async (url) => {
   try {
@@ -30,25 +31,15 @@ const getData = async (url) => {
   }
 };
 
-const renderCards = (wrapper, heroesList, filter = null) => {
-  wrapper.innerHTML = "";
-  heroesList =
-    filter && filter.value !== "All"
-      ? heroesList.filter((item) => {
-          return Array.isArray(item[filter.key])
-            ? item[filter.key].includes(filter.value)
-            : item[filter.key] === filter.value;
-        })
-      : heroesList;
-  const all = filter && filter.value === "All";
-  totalString(all, heroesList.length);
-  heroesList.forEach((hero) => {
-    const heroCard = new HeroCard();
-    heroCard.setBgImg(hero.photo);
-    heroCard.setName(hero.name);
-    heroCard.setSpecifications(hero);
-
-    wrapper.append(heroCard.card);
+const render = () => {
+  const filterData = storageFilter.isExist() ? storageFilter.get() : false;
+  renderCards(cards, storageData.get(), filterData);
+  const filter = new FilterMovie(storageMovies.get(), filterData);
+  filter.block.addEventListener("input", (e) => {
+    const { name: key, value } = e.target;
+    const filterData = { key, value };
+    storageFilter.set(filterData);
+    renderCards(cards, storageData.get(), filterData);
   });
 };
 
@@ -63,18 +54,11 @@ if (!storageData.isExist() || !storageMovies.isExist()) {
         []
       );
       storageMovies.set([...new Set(movies)]);
+      render();
     }
   })();
 } else {
-  renderCards(cards, storageData.get());
-
-  const filter = new FilterMovie(storageMovies.get());
-  filter.block.addEventListener("input", (e) => {
-    renderCards(cards, storageData.get(), {
-      key: "movies",
-      value: e.target.value,
-    });
-  });
+  render();
 }
 
 cards.addEventListener("click", (e) => {

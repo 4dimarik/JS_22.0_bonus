@@ -1,12 +1,10 @@
 import { numeralsWithNouns } from "./helpers";
+
 const totalString = (all, num) => {
   const total = document.querySelector(".total");
+  const noun = numeralsWithNouns(num, ["герой", "героя", "героев"]);
 
-  const string = all
-    ? `Всего ${num} ${numeralsWithNouns(num, ["герой", "героя", "героев"])}`
-    : `Найдено ${num} ${numeralsWithNouns(num, ["герой", "героя", "героев"])}`;
-
-  total.textContent = string;
+  total.textContent = all ? `Всего ${num} ${noun}` : `Найдено ${num} ${noun}`;
 };
 
 export default totalString;
